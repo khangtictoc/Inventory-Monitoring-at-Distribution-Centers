@@ -26,7 +26,7 @@ Official dataset reference: [Amazon Bin Image Dataset](https://registry.opendata
 
 The Amazon Bin Image Dataset contains over 500,000 images and metadata from bins of a pod in an operating Amazon Fulfillment Center. The bin images in this dataset are captured as robot units carry pods as part of normal Amazon Fulfillment Center operations.
 
-As for a large dataset, we plan to use only a subset of **XXX** samples from the original dataset which is served as experiment tasks to examine the efficiency of the model. The subset only contains bin images that store the number of items between '1' and '5'. 
+As for a large dataset, we plan to use only a subset of **10441** samples from the original dataset which is served as experiment tasks to examine the efficiency of the model. The subset only contains bin images that store the number of items between '1' and '5'. 
 
 Sample of the images. 
 

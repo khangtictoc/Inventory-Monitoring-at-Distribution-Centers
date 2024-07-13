@@ -9,10 +9,6 @@ from torchvision import datasets
 import torchvision.models as models
 import torchvision.transforms as transforms
 
-# Debugger & Profiler
-import smdebug.pytorch as smd
-from smdebug.profiler.utils import str2bool
-
 
 import argparse
 import os
@@ -40,6 +36,8 @@ def test(model, test_loader, criterion, device):
     print("# Testing Model on Whole Testing Dataset #")
     print("##########################################")
 
+    #hook.set_mode(smd.modes.EVAL)
+
     model.to(device)
     model.eval()
     running_loss = 0
@@ -66,7 +64,7 @@ def test(model, test_loader, criterion, device):
     print("Testing Total Loss: {:.3f}, Testing Accuracy: {:.3f}%".format(total_loss, 100*total_acc))
 
 
-def train(model, train_loader, validation_loader, epochs, criterion, optimizer, device, hook=None):
+def train(model, train_loader, validation_loader, epochs, criterion, optimizer, device):
     '''
         Complete this function that can take a model and
         data loaders for training and will get train the model
@@ -87,10 +85,8 @@ def train(model, train_loader, validation_loader, epochs, criterion, optimizer, 
             print(f"Epoch {epoch}, Phase {phase}")
 
             if phase == 'train':
-                hook.set_mode(smd.modes.TRAIN)
                 model.train()
             else:
-                hook.set_mode(smd.modes.EVAL)
                 model.eval()
 
             running_loss = 0.0
@@ -148,7 +144,7 @@ def net():
     model.fc = nn.Sequential(
         nn.Linear(num_features, 1024),
         nn.ReLU(inplace=True),
-        nn.Linear(1024, 133)
+        nn.Linear(1024, NUM_OUTPUT_LABELS)
     )
     
     return model
@@ -192,13 +188,10 @@ def get_args():
         "--lr", type=float, default=1.0, metavar="LR", help="learning rate (default: 1.0)"
     )
 
-    # Profiler -If True, the script will run on GPU
-    parser.add_argument("--gpu", type=str2bool, default=True)
-
     # Pass channel data as arguments (train, validation, test)
-    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAINING'] )
-    parser.add_argument('--valid',  type=str, default=os.environ['SM_CHANNEL_VALIDATION'] )
-    parser.add_argument('--test', type=str, default=os.environ['SM_CHANNEL_TESTING'] )
+    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAINING'] if os.environ.get('SM_CHANNEL_TRAINING') != None else './dataset/dogImages/train')
+    parser.add_argument('--valid',  type=str, default=os.environ['SM_CHANNEL_VALIDATION'] if os.environ.get('SM_CHANNEL_VALIDATION') != None else './dataset/dogImages/valid')
+    parser.add_argument('--test', type=str, default=os.environ['SM_CHANNEL_TESTING'] if os.environ.get('SM_CHANNEL_TESTING') != None else './dataset/dogImages/test')
 
     args = parser.parse_args()
     return args
@@ -219,11 +212,6 @@ def main():
     loss_criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), args.lr)
 
-    # Debugger - Create Hook for capture tensors
-    hook = smd.Hook.create_from_json_file()
-    hook.register_hook(model)
-    hook.register_loss(loss_criterion)
-
     # Determine if we should use the CUDA GPU
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"Running on Device {device}")
@@ -235,8 +223,7 @@ def main():
         args.epochs,
         loss_criterion,
         optimizer,
-        device,
-        hook
+        device
     )
 
     # Save the trained model

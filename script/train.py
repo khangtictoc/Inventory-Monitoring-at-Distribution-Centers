@@ -150,7 +150,7 @@ def main(args):
     train_loader, test_loader, validation_loader=create_data_loaders(args.data, args.batch_size)
     model=net()
     
-    criterion = nn.CrossEntropyLoss(ignore_index=133)
+    criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.fc.parameters(), lr=args.lr)
 
     # Debugger - Create Hook for capture tensors

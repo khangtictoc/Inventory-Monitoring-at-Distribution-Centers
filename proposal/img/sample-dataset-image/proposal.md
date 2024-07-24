@@ -31,17 +31,17 @@ As for a large dataset, we plan to use only a subset of **10441** samples from t
 Sample of the images. 
 
 <div align="center">
-    <img width="20%" src="./img/sample-dataset-image/00009.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00035.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00048.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00084.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00009.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00035.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00048.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00084.jpg">
 </div>
 
 <div align="center">
-    <img width="20%" src="./img/sample-dataset-image/00086.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00148.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00194.jpg">
-    <img width="20%" src="./img/sample-dataset-image/00218.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00086.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00148.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00194.jpg">
+    <img width="20%" src="../dataset/bin-images/train/1/00218.jpg">
 </div>
 
 

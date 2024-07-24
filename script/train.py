@@ -102,19 +102,9 @@ def train(model, train_loader, validation_loader, criterion, optimizer, epochs, 
 
             epoch_loss = 100.0 * running_loss // len(image_dataset[phase].dataset)
             epoch_acc = 100.0 * running_corrects // len(image_dataset[phase].dataset)
-            
-            if phase == 'valid':
-                if epoch_loss < best_loss:
-                    best_loss = epoch_loss
-                else:
-                    loss_counter+=1
 
             print("Phase training, Epoch loss {:.3f}%, Epoch accuracy {:.3f}%".format(epoch_loss, epoch_acc))
-        
-        if loss_counter==1:
-            break
-        if epoch==0:
-            break
+            
     return model
     
 def net():
@@ -165,7 +155,7 @@ def main(args):
 
     # Debugger - Create Hook for capture tensors
     hook = smd.Hook.create_from_json_file()
-    hook.register_hook(model)
+    hook.register_module(model)
     hook.register_loss(criterion)
 
     # Determine if we should use the CUDA GPU
